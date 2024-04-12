@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, FlatList, Modal, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Modal,
+  Alert,
+  Pressable,
+} from "react-native";
 
 import Button from "../components/Button";
 
@@ -9,9 +17,16 @@ const GameScreen = (props) => {
   const [maximum, setMaximum] = useState(99);
   const [guessMade, setGuessMade] = useState(false);
   const [guessed, setGuessed] = useState([]);
-  const [numberGuessed, setnumberGuessed] = useState(false);
 
-  console.log(props.confirmedNumber, GuessNumber, numberGuessed);
+  function gameOver() {
+    if (guessed.length == 4) {
+      props.setGameOver(true);
+      console.log("Game Over")
+    }
+  }
+  
+
+  console.log(props.confirmedNumber, GuessNumber, props.numberGuessed);
 
   function guesses() {
     setGuessed(() => [
@@ -19,10 +34,6 @@ const GameScreen = (props) => {
       { text: GuessNumber, key: Math.random().toString() },
     ]);
   }
-
-  //   function gameOver() {
-  //     if () {
-  //   }
 
   let Screen;
 
@@ -32,26 +43,27 @@ const GameScreen = (props) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
-// This useEffect handles the side effect of generating a new guess
-useEffect(() => {
-  if (!guessMade) {
-    setGuessNumber(generateRandomNumber(minimum, maximum));
+  // This useEffect handles the side effect of generating a new guess
+  useEffect(() => {
+    if (!guessMade) {
+      setGuessNumber(generateRandomNumber(minimum, maximum));
+      
+    }
+  }, [guessMade]);
+
+  // This useEffect handles the side effect of checking if the number has been guessed
+
+  if (props.confirmedNumber == GuessNumber && !props.numberGuessed) {
+    console.log("you won!");
+    props.setnumberGuessed(true);
   }
-}, [guessMade]);
-
-// This useEffect handles the side effect of checking if the number has been guessed
-
-if (props.confirmedNumber == GuessNumber && !numberGuessed) {
-  console.log("you won!");
-  setnumberGuessed(true);
-}
-
 
   function higher() {
     setMinimum(GuessNumber);
     setGuessNumber(generateRandomNumber(GuessNumber, maximum));
     setGuessMade(true);
     guesses();
+    gameOver();
   }
 
   function lower() {
@@ -59,11 +71,12 @@ if (props.confirmedNumber == GuessNumber && !numberGuessed) {
     setGuessNumber(generateRandomNumber(minimum, GuessNumber));
     setGuessMade(true);
     guesses();
+    gameOver();
   }
 
   return (
     <>
-      {numberGuessed ? (
+      {props.numberGuessed ? (
         <Modal
           animationType="slide"
           transparent={true}
@@ -73,10 +86,23 @@ if (props.confirmedNumber == GuessNumber && !numberGuessed) {
             setModalVisible(!modalVisible);
           }}
         >
-          <View style={styles.modal}>
-            <Text style={styles.header}>
-              Congratulations! You won the game!
-            </Text>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <View style={styles.modal}>
+              <Text style={styles.header}>
+                Congratulations! You won the game!
+              </Text>
+              <Text> Number guessed: {props.confirmedNumber}</Text>
+              <Text style={{marginBottom: 30}}> Guesses: {guessed.length}</Text>
+              <Pressable>
+                <Button title="Play Again" onPress={props.fnctnGuessedNumber} />
+              </Pressable>
+            </View>
           </View>
         </Modal>
       ) : (
@@ -125,8 +151,19 @@ if (props.confirmedNumber == GuessNumber && !numberGuessed) {
 };
 
 const styles = StyleSheet.create({
-  modal: {},
+  modal: {
+    padding: 20,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f0f0f0",
+    justifyContent: "space-between",
+    width: 300,
+    paddingHorizontal: 15,
+    borderRadius: 30,
+  },
   renderedGuess: {
+    color: "white",
     fontSize: 16,
     margin: 5,
     flexDirection: "column",
