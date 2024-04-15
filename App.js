@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View, Alert } from "react-native";
+import { StyleSheet, View, Alert, SafeAreaView } from "react-native";
 import StartGameScreen from "./screens/StartGameScreen";
 import GameScreen from "./screens/GameScreen";
 import GameOverScreen from "./screens/GameOverScreen";
@@ -44,7 +44,7 @@ export default function App() {
   }
 
   return (
-    <>
+    <SafeAreaView>
       <StatusBar style="auto" />
       <View style={styles.container}>
         {gameOver ? (
@@ -68,7 +68,7 @@ export default function App() {
           />
         )}
       </View>
-    </>
+    </SafeAreaView>
   );
 }
 
