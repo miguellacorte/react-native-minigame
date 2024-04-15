@@ -7,6 +7,7 @@ const GameOverScreen = (props) => {
         <View style={styles.container}>
             <Text style={styles.title}>Game Over</Text>
             <Text style={styles.subtitle}>Better luck next time!</Text>
+            <Text style={styles.subtitle}>You ran out of attempts (5 tries)</Text>
            <Button title="Try Again" onPress={props.gameReset} />
         </View>
     );

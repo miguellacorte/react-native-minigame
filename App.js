@@ -4,7 +4,7 @@ import StartGameScreen from "./screens/StartGameScreen";
 import GameScreen from "./screens/GameScreen";
 import GameOverScreen from "./screens/GameOverScreen";
 
-import { useState} from "react";
+import { useState } from "react";
 
 export default function App() {
   const [number, setNumber] = useState("");
@@ -27,11 +27,11 @@ export default function App() {
     }
   }
 
-  function gameReset() { 
+  function gameReset() {
     setGameStarted(false);
     setnumberGuessed(false);
     setGameOver(false);
-    setNumber('');
+    setNumber("");
     setConfirmedNumber();
   }
 
@@ -44,13 +44,12 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView>
+    <>
       <StatusBar style="auto" />
-      <View style={styles.container}>
+
+      <SafeAreaView style={styles.container}>
         {gameOver ? (
-          <GameOverScreen 
-            gameReset={gameReset}
-          />
+          <GameOverScreen gameReset={gameReset} />
         ) : gameStarted ? (
           <GameScreen
             confirmedNumber={confirmedNumber}
@@ -67,8 +66,8 @@ export default function App() {
             handleNumberInput={handleNumberInput}
           />
         )}
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </>
   );
 }
 
